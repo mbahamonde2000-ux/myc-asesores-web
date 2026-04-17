@@ -14,24 +14,52 @@ const fadeUp = {
 
 const services = [
   {
-    title: "Consultoría financiera",
-    text: "Análisis, control y planificación para apoyar decisiones con mayor claridad y respaldo.",
+    title: "Estructuración financiera",
+    text: "Ordenamos la estructura financiera de tu empresa, generando visibilidad, control y una base sólida para la toma de decisiones.",
     img: "https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=1200&q=80",
     icon: BarChart3,
   },
   {
-    title: "Optimización de procesos",
-    text: "Diseño de flujos eficientes, trazables y escalables para mejorar la operación del negocio.",
+    title: "Gestión y control operativo",
+    text: "Implementamos procesos claros y medibles que permiten controlar la operación, reducir errores y mejorar la eficiencia del negocio.",
     img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
     icon: Briefcase,
   },
   {
-    title: "Transformación digital",
-    text: "Implementación de soluciones tecnológicas y plataformas adaptadas a la realidad de cada empresa.",
+    title: "Tecnología y herramientas a medida",
+    text: "Desarrollamos soluciones adaptadas a tu empresa, integrando tecnología que realmente se ajusta a tu forma de trabajar.",
     img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&q=80",
     icon: ShieldCheck,
   },
 ];
+
+<section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-10">
+  <div className="text-sm font-semibold uppercase tracking-[0.32em] text-neutral-400">
+    Problemas que resolvemos
+  </div>
+  <h2 className="mt-3 text-3xl font-black sm:text-4xl lg:text-5xl">
+    Si esto te suena familiar, podemos ayudarte.
+  </h2>
+
+  <div className="mt-10 grid gap-4 md:grid-cols-2">
+    {[
+      "Falta de claridad financiera para tomar decisiones",
+      "Procesos desordenados o poco controlados",
+      "Crecimiento sin estructura ni control",
+      "Información dispersa o poco confiable",
+      "Dependencia excesiva de personas clave",
+      "Sistemas que no se adaptan al negocio",
+    ].map((item, index) => (
+      <div
+        key={index}
+        className="rounded-2xl border border-white/10 bg-neutral-900/70 p-5 text-neutral-300"
+      >
+        {item}
+      </div>
+    ))}
+  </div>
+</section>
+
 
 const pillars = [
   "Diagnóstico ejecutivo del negocio",
@@ -89,8 +117,8 @@ export default function MyCAsesoresLanding() {
               animate="visible"
               className="text-4xl font-black leading-tight sm:text-5xl lg:text-6xl xl:text-7xl"
             >
-              Soluciones corporativas
-              <span className="block text-neutral-400">para ordenar, controlar y crecer</span>
+            Orden financiero y control real
+            <span className="block text-neutral-400">para empresas en crecimiento</span>
             </motion.h1>
 
             <motion.p
@@ -100,7 +128,7 @@ export default function MyCAsesoresLanding() {
               animate="visible"
               className="mt-6 max-w-2xl text-base leading-8 text-neutral-300 sm:text-lg"
             >
-              En MyC Asesores apoyamos a empresas que necesitan una mirada ejecutiva, control operativo y herramientas concretas para tomar mejores decisiones.
+              En MyC Asesores ayudamos a pymes a salir del desorden, recuperar el control y construir una operación preparada para crecer, mediante procesos claros y herramientas adaptadas a su realidad.
             </motion.p>
 
             <motion.div
@@ -234,6 +262,9 @@ export default function MyCAsesoresLanding() {
             <p className="mt-6 max-w-xl text-base leading-8 text-neutral-300 sm:text-lg">
               Combinamos experiencia ejecutiva, visión financiera y capacidad de implementación para entregar soluciones reales que se traducen en control, eficiencia y crecimiento.
             </p>
+            <p className="mt-6 text-lg font-semibold text-white">
+              La empresa no se adapta al sistema. El sistema se adapta a la empresa.
+            </p>
           </motion.div>
 
           <div className="grid gap-4">
@@ -253,6 +284,35 @@ export default function MyCAsesoresLanding() {
           </div>
         </div>
       </section>
+
+      <section className="border-y border-white/10 bg-white/5">
+  <div className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-10">
+    <div className="text-sm font-semibold uppercase tracking-[0.32em] text-neutral-400">
+      Cómo trabajamos
+    </div>
+    <h2 className="mt-3 text-3xl font-black sm:text-4xl lg:text-5xl">
+      Un enfoque práctico, claro y orientado a resultados.
+    </h2>
+
+    <div className="mt-10 grid gap-4 md:grid-cols-2">
+      {[
+        "Diagnóstico financiero y operativo del negocio",
+        "Identificación de puntos críticos y prioridades",
+        "Diseño de procesos y estructura de control",
+        "Implementación de herramientas adaptadas a la empresa",
+        "Acompañamiento continuo y mejora permanente",
+        "Enfoque práctico, no teórico",
+      ].map((item, index) => (
+        <div
+          key={index}
+          className="rounded-2xl border border-white/10 bg-neutral-900/70 p-5 text-neutral-300"
+        >
+          {item}
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
 
       <section id="contacto" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-10">
         <motion.div
