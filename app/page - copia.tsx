@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -9,11 +8,9 @@ import {
   Briefcase,
   ChevronRight,
   Mail,
-  Menu,
   MessageCircle,
   Phone,
   ShieldCheck,
-  X,
 } from "lucide-react";
 
 const fadeUp = {
@@ -53,83 +50,12 @@ const pillars = [
   "Acompañamiento continuo y mejora permanente",
 ];
 
-const navItems = [
-  { label: "Problemas", href: "#problemas", id: "problemas" },
-  { label: "Solución", href: "#propuesta", id: "propuesta" },
-  { label: "Servicios", href: "#servicios", id: "servicios" },
-  { label: "Caso", href: "#caso", id: "caso" },
-  { label: "Contacto", href: "#contacto", id: "contacto" },
-];
-
 export default function MyCAsesoresLanding() {
-    const [activeSection, setActiveSection] = useState("problemas");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-useEffect(() => {
-  const sectionIds = ["problemas", "propuesta", "servicios", "caso", "contacto"];
-
-  const handleScroll = () => {
-    const scrollBottom = window.innerHeight + window.scrollY;
-    const documentHeight = document.documentElement.scrollHeight;
-
-    if (scrollBottom >= documentHeight - 180) {
-      setActiveSection("contacto");
-      return;
-    }
-
-    const viewportMiddle = window.innerHeight * 0.35;
-    let currentSection = sectionIds[0];
-
-    for (const id of sectionIds) {
-      const element = document.getElementById(id);
-      if (!element) continue;
-
-      const rect = element.getBoundingClientRect();
-
-      if (rect.top <= viewportMiddle && rect.bottom >= viewportMiddle) {
-        currentSection = id;
-        break;
-      }
-
-      if (rect.top <= viewportMiddle) {
-        currentSection = id;
-      }
-    }
-
-    setActiveSection(currentSection);
-  };
-
-  handleScroll();
-  window.addEventListener("scroll", handleScroll);
-  window.addEventListener("resize", handleScroll);
-
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-    window.removeEventListener("resize", handleScroll);
-  };
-}, []);
-
-  const handleNavClick = (href: string) => {
-    setMobileMenuOpen(false);
-
-    const targetId = href.replace("#", "");
-    const element = document.getElementById(targetId);
-
-    if (element) {
-      const headerOffset = 96;
-      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-      const offsetPosition = elementPosition - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-    }
-  };
   return (
     <div className="min-h-screen overflow-x-hidden bg-neutral-950 text-white">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.09),transparent_18%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_22%),linear-gradient(to_bottom,#0a0a0a,#121212,#0a0a0a)]" />
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur-xl">
+
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-neutral-950/80 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-10">
           <div className="flex h-10 items-center">
             <Image
@@ -142,90 +68,41 @@ useEffect(() => {
             />
           </div>
 
-          <nav className="hidden items-center gap-8 md:flex">
-            {navItems.map((item) => {
-              const isActive = activeSection === item.id;
+          <nav className="hidden items-center gap-8 text-sm text-neutral-400 md:flex">
+  {[
+    { label: "Problemas", href: "#problemas" },
+    { label: "Solución", href: "#propuesta" },
+    { label: "Servicios", href: "#servicios" },
+    { label: "Caso", href: "#caso" },
+    { label: "Contacto", href: "#contacto" },
+  ].map((item) => (
+    <a
+      key={item.href}
+      href={item.href}
+      className="relative group transition"
+    >
+      <span className="transition group-hover:text-white">
+        {item.label}
+      </span>
 
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleNavClick(item.href)}
-                  className="group relative text-sm transition"
-                >
-                  <span
-                    className={`transition ${
-                      isActive ? "text-white" : "text-neutral-400 group-hover:text-white"
-                    }`}
-                  >
-                    {item.label}
-                  </span>
-                  <span
-                    className={`absolute -bottom-1 left-0 h-[2px] bg-white transition-all duration-300 ${
-                      isActive ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
-                  />
-                </button>
-              );
-            })}
-          </nav>
+      {/* línea animada */}
+      <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
+    </a>
+  ))}
+</nav>
 
-          <div className="flex items-center gap-3">
-            <a
-              href="https://wa.me/56934680515"
-              target="_blank"
-              rel="noreferrer"
-              className="hidden items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-white/10 sm:inline-flex"
-            >
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp
-            </a>
-
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((prev) => !prev)}
-              className="inline-flex rounded-2xl border border-white/10 bg-white/5 p-2 text-white transition hover:bg-white/10 md:hidden"
-              aria-label="Abrir menú"
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
+  
+          <a
+            href="https://wa.me/56934680515"
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-white/10"
+          >
+            <MessageCircle className="h-4 w-4" />
+            WhatsApp
+          </a>
+          
         </div>
-
-        {mobileMenuOpen && (
-          <div className="border-t border-white/10 bg-neutral-950/95 px-5 py-4 md:hidden">
-            <div className="flex flex-col gap-3">
-              {navItems.map((item) => {
-                const isActive = activeSection === item.id;
-
-                return (
-                  <button
-                    key={item.id}
-                    type="button"
-                    onClick={() => handleNavClick(item.href)}
-                    className={`rounded-xl px-3 py-3 text-left text-sm transition ${
-                      isActive
-                        ? "bg-white text-black"
-                        : "bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white"
-                    }`}
-                  >
-                    {item.label}
-                  </button>
-                );
-              })}
-
-              <a
-                href="https://wa.me/56934680515"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-              >
-                <MessageCircle className="h-4 w-4" />
-                WhatsApp
-              </a>
-            </div>
-          </div>
-        )}
       </header>
 
       <section className="relative">
