@@ -133,7 +133,7 @@ useEffect(() => {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-10">
           <div className="flex h-10 items-center">
             <Image
-              src="/logo.png"
+              src="/Logo.png"
               alt="MyC Asesores"
               width={140}
               height={40}
