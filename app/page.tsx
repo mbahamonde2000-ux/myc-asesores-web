@@ -135,7 +135,7 @@ useEffect(() => {
             <Image
               src="/Logo.png"
               alt="MyC Asesores"
-              width={140}
+              width={100}
               height={40}
               className="object-contain"
               priority
@@ -247,8 +247,8 @@ useEffect(() => {
               animate="visible"
               className="text-4xl font-black leading-tight sm:text-5xl lg:text-6xl xl:text-7xl"
             >
-              Orden financiero y control real
-              <span className="block text-neutral-400">para empresas en crecimiento</span>
+              Recupera el control de tu empresa y toma decisiones con información real
+              <span className="block text-neutral-400">y toma decisiones con información real</span>
             </motion.h1>
 
             <motion.p
@@ -271,10 +271,10 @@ useEffect(() => {
               className="mt-10 flex flex-col gap-4 sm:flex-row"
             >
               <a
-                href="#contacto"
+                href="mailto:contacto@mycasesores.cl?subject=Solicitud%20de%20reunión&body=Hola,%20quiero%20agendar%20una%20reunión%20para%20revisar%20mi%20empresa."
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-3.5 font-semibold text-black transition hover:-translate-y-0.5 hover:bg-neutral-200"
               >
-                Agendar reunión
+                Agenda un diagnóstico inicial
                 <ArrowRight className="h-4 w-4" />
               </a>
               <a
@@ -362,7 +362,9 @@ useEffect(() => {
             Si esto te suena familiar, podemos ayudarte.
           </h2>
         </motion.div>
-
+        <p className="mt-4 text-neutral-300 max-w-2xl">
+        La mayoría de las empresas no falla por falta de ventas, sino por falta de control:
+        </p>
         <div className="mt-10 grid gap-4 md:grid-cols-2">
           {[
             "Falta de claridad financiera para tomar decisiones",
@@ -573,9 +575,7 @@ useEffect(() => {
           variants={fadeUp}
           className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-6 text-neutral-200"
         >
-          Resultado: la empresa logró ordenar su operación, mejorar la visibilidad
-          financiera y tomar decisiones con mayor seguridad, quedando preparada para una
-          siguiente etapa de crecimiento.
+          Resultado: la empresa pasó de operar con información dispersa y sin control, a tener visibilidad financiera clara, procesos definidos y capacidad real de toma de decisiones, quedando preparada para escalar.
         </motion.div>
       </section>
 
@@ -613,6 +613,19 @@ useEffect(() => {
         </div>
       </section>
 
+<section className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-10">
+  <div className="text-center">
+    <h2 className="text-3xl font-black sm:text-4xl">
+      Ordenar tu empresa no es opcional si quieres crecer.
+    </h2>
+    <p className="mt-4 text-neutral-400">
+      Mientras antes tomes control, mejores decisiones vas a poder tomar.
+    </p>
+  </div>
+</section>
+
+
+
       <section id="contacto" className="mx-auto max-w-7xl px-5 py-20 sm:px-6 lg:px-10">
         <motion.div
           initial="hidden"
@@ -621,6 +634,8 @@ useEffect(() => {
           variants={fadeUp}
           className="rounded-[2rem] border border-white/10 bg-neutral-900/70 p-6 shadow-2xl shadow-black/20 sm:p-8 lg:p-12"
         >
+
+          
           <div className="max-w-3xl">
             <div className="text-sm font-semibold uppercase tracking-[0.32em] text-neutral-400">
               Contacto
@@ -637,7 +652,7 @@ useEffect(() => {
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             <motion.a
               whileHover={{ y: -4 }}
-              href="mailto:m.bahamonde2000@gmail.com"
+              href="mailto:contacto@mycasesores.cl"
               className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:bg-white/10"
             >
               <div className="rounded-2xl bg-white/10 p-3 text-white">
@@ -646,12 +661,12 @@ useEffect(() => {
               <div>
                 <div className="text-sm text-neutral-400">Correo</div>
                 <div className="break-all font-medium text-white">
-                  m.bahamonde2000@gmail.com
+                  contacto@mycasesores.cl
                 </div>
               </div>
             </motion.a>
 
-            <motion.a
+           {/* <motion.a
               whileHover={{ y: -4 }}
               href="tel:+56934680515"
               className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-5 transition hover:bg-white/10"
@@ -663,7 +678,7 @@ useEffect(() => {
                 <div className="text-sm text-neutral-400">Teléfono</div>
                 <div className="font-medium text-white">+56 9 3468 0515</div>
               </div>
-            </motion.a>
+            </motion.a>*/}
 
             <motion.a
               whileHover={{ y: -4 }}
