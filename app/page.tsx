@@ -210,36 +210,45 @@ useEffect(() => {
         {mobileMenuOpen && (
   <div className="border-t border-white/10 bg-neutral-950/95 px-5 py-4 md:hidden">
     <div className="flex flex-col gap-3">
-      {navItems.map((item) => {
-        const isInternalSection = item.href.startsWith("#");
-        const isActive = isInternalSection && activeSection === item.id;
+  {navItems.map((item) => {
+    const isActive = activeSection === item.id;
 
-        return (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => handleNavClick(item.href)}
-            className={`rounded-xl px-3 py-3 text-left text-sm transition ${
-              isActive
-                ? "bg-white text-black"
-                : "bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white"
-            }`}
-          >
-            {item.label}
-          </button>
-        );
-      })}
-
-      <a
-        href="https://wa.me/56934680515"
-        target="_blank"
-        rel="noreferrer"
-        className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+    return (
+      <button
+        key={item.id}
+        type="button"
+        onClick={() => handleNavClick(item.href)}
+        className={`rounded-xl px-3 py-3 text-left text-sm transition ${
+          isActive
+            ? "bg-white text-black"
+            : "bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white"
+        }`}
       >
-        <MessageCircle className="h-4 w-4" />
-        WhatsApp
-      </a>
-    </div>
+        {item.label}
+      </button>
+    );
+  })}
+
+  {/* 👉 AQUÍ VA EL BOTÓN NUEVO */}
+  <a
+    href="/seccion-clientes"
+    className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-black transition hover:bg-neutral-200"
+  >
+    <ShieldCheck className="h-4 w-4" />
+    Sección Clientes
+  </a>
+
+  {/* 👇 ESTE YA LO TENÍAS */}
+  <a
+    href="https://wa.me/56934680515"
+    target="_blank"
+    rel="noreferrer"
+    className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+  >
+    <MessageCircle className="h-4 w-4" />
+    WhatsApp
+  </a>
+</div>
   </div>
 )}
       </header>
