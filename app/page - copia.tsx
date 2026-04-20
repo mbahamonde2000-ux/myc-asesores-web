@@ -59,7 +59,6 @@ const navItems = [
   { label: "Servicios", href: "#servicios", id: "servicios" },
   { label: "Caso", href: "#caso", id: "caso" },
   { label: "Contacto", href: "#contacto", id: "contacto" },
-  
 ];
 
 export default function MyCAsesoresLanding() {
@@ -111,27 +110,22 @@ useEffect(() => {
 }, []);
 
   const handleNavClick = (href: string) => {
-  setMobileMenuOpen(false);
+    setMobileMenuOpen(false);
 
-  if (!href.startsWith("#")) {
-    window.location.href = href;
-    return;
-  }
+    const targetId = href.replace("#", "");
+    const element = document.getElementById(targetId);
 
-  const targetId = href.replace("#", "");
-  const element = document.getElementById(targetId);
+    if (element) {
+      const headerOffset = 96;
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY;
+      const offsetPosition = elementPosition - headerOffset;
 
-  if (element) {
-    const headerOffset = 96;
-    const elementPosition = element.getBoundingClientRect().top + window.scrollY;
-    const offsetPosition = elementPosition - headerOffset;
-
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth",
-    });
-  }
-};
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
   return (
     <div className="min-h-screen overflow-x-hidden bg-neutral-950 text-white">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.09),transparent_18%),radial-gradient(circle_at_left,rgba(255,255,255,0.05),transparent_22%),linear-gradient(to_bottom,#0a0a0a,#121212,#0a0a0a)]" />
@@ -149,99 +143,89 @@ useEffect(() => {
           </div>
 
           <nav className="hidden items-center gap-8 md:flex">
-  {navItems.map((item) => {
-    const isInternalSection = item.href.startsWith("#");
-    const isActive = isInternalSection && activeSection === item.id;
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
 
-    return (
-      <button
-        key={item.id}
-        type="button"
-        onClick={() => handleNavClick(item.href)}
-        className="group relative text-sm transition"
-      >
-        <span
-          className={`transition ${
-            isActive ? "text-white" : "text-neutral-400 group-hover:text-white"
-          }`}
-        >
-          {item.label}
-        </span>
-        <span
-          className={`absolute -bottom-1 left-0 h-[2px] bg-white transition-all duration-300 ${
-            isActive ? "w-full" : "w-0 group-hover:w-full"
-          }`}
-        />
-      </button>
-    );
-  })}
-</nav>
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleNavClick(item.href)}
+                  className="group relative text-sm transition"
+                >
+                  <span
+                    className={`transition ${
+                      isActive ? "text-white" : "text-neutral-400 group-hover:text-white"
+                    }`}
+                  >
+                    {item.label}
+                  </span>
+                  <span
+                    className={`absolute -bottom-1 left-0 h-[2px] bg-white transition-all duration-300 ${
+                      isActive ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </button>
+              );
+            })}
+          </nav>
 
-         <div className="flex items-center gap-3">
-  <a
-    href="/seccion-clientes"
-    className="hidden items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-semibold text-black transition hover:-translate-y-0.5 hover:bg-neutral-200 sm:inline-flex"
-  >
-    <ShieldCheck className="h-4 w-4" />
-    Clientes
-  </a>
+          <div className="flex items-center gap-3">
+            <a
+              href="https://wa.me/56934680515"
+              target="_blank"
+              rel="noreferrer"
+              className="hidden items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-white/10 sm:inline-flex"
+            >
+              <MessageCircle className="h-4 w-4" />
+              WhatsApp
+            </a>
 
-  <a
-    href="https://wa.me/56934680515"
-    target="_blank"
-    rel="noreferrer"
-    className="hidden items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white transition hover:-translate-y-0.5 hover:bg-white/10 sm:inline-flex"
-  >
-    <MessageCircle className="h-4 w-4" />
-    WhatsApp
-  </a>
-
-  <button
-    type="button"
-    onClick={() => setMobileMenuOpen((prev) => !prev)}
-    className="inline-flex rounded-2xl border border-white/10 bg-white/5 p-2 text-white transition hover:bg-white/10 md:hidden"
-    aria-label="Abrir menú"
-  >
-    {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-  </button>
-</div>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              className="inline-flex rounded-2xl border border-white/10 bg-white/5 p-2 text-white transition hover:bg-white/10 md:hidden"
+              aria-label="Abrir menú"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
 
         {mobileMenuOpen && (
-  <div className="border-t border-white/10 bg-neutral-950/95 px-5 py-4 md:hidden">
-    <div className="flex flex-col gap-3">
-      {navItems.map((item) => {
-        const isInternalSection = item.href.startsWith("#");
-        const isActive = isInternalSection && activeSection === item.id;
+          <div className="border-t border-white/10 bg-neutral-950/95 px-5 py-4 md:hidden">
+            <div className="flex flex-col gap-3">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
 
-        return (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => handleNavClick(item.href)}
-            className={`rounded-xl px-3 py-3 text-left text-sm transition ${
-              isActive
-                ? "bg-white text-black"
-                : "bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white"
-            }`}
-          >
-            {item.label}
-          </button>
-        );
-      })}
+                return (
+                  <button
+                    key={item.id}
+                    type="button"
+                    onClick={() => handleNavClick(item.href)}
+                    className={`rounded-xl px-3 py-3 text-left text-sm transition ${
+                      isActive
+                        ? "bg-white text-black"
+                        : "bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
+                );
+              })}
 
-      <a
-        href="https://wa.me/56934680515"
-        target="_blank"
-        rel="noreferrer"
-        className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-      >
-        <MessageCircle className="h-4 w-4" />
-        WhatsApp
-      </a>
-    </div>
-  </div>
-)}
+              <a
+                href="https://wa.me/56934680515"
+                target="_blank"
+                rel="noreferrer"
+                className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+              >
+                <MessageCircle className="h-4 w-4" />
+                WhatsApp
+              </a>
+            </div>
+          </div>
+        )}
       </header>
 
       <section className="relative">
