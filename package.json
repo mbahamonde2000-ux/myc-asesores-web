@@ -9,12 +9,21 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/adapter-mariadb": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
     "framer-motion": "^12.37.0",
+    "jose": "^6.2.3",
     "lucide-react": "^0.577.0",
+    "mariadb": "^3.5.2",
     "next": "16.1.7",
     "nodemailer": "^8.0.5",
+    "prisma": "^7.8.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "resend": "^6.12.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

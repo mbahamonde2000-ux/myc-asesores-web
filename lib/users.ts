@@ -6,6 +6,7 @@ export type AppUser = {
   username: string;
   password: string;
   role: UserRole;
+  clientId?: number;
 };
 
 export const users: AppUser[] = [
@@ -29,5 +30,6 @@ export const users: AppUser[] = [
     username: "cliente",
     password: "cliente123",
     role: "cliente",
+    clientId: 1,
   },
 ];

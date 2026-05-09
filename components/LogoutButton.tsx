@@ -7,10 +7,13 @@ import { logout } from "@/lib/auth";
 export default function LogoutButton() {
   const router = useRouter();
 
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
-  };
+ const handleLogout = async () => {
+  await fetch("/api/auth/logout", {
+    method: "POST",
+  });
+
+  window.location.href = "/login";
+};
 
   return (
     <button

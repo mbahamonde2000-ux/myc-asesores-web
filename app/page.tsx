@@ -273,7 +273,7 @@ useEffect(() => {
               className="text-4xl font-black leading-tight sm:text-5xl lg:text-6xl xl:text-7xl"
             >
               Recupera el control de tu empresa y toma decisiones con información real
-              <span className="block text-neutral-400">y toma decisiones con información real</span>
+              
             </motion.h1>
 
             <motion.p
@@ -283,7 +283,7 @@ useEffect(() => {
               animate="visible"
               className="mt-6 max-w-2xl text-base leading-8 text-neutral-300 sm:text-lg"
             >
-              En MyC Asesores ayudamos a pymes a salir del desorden, recuperar el control y
+              En MyC Asesores ayudamos a pequeñas y medianas empresas a salir del desorden, recuperar el control y
               construir una operación preparada para crecer, mediante procesos claros y
               herramientas adaptadas a su realidad.
             </motion.p>

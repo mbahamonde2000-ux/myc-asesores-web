@@ -1,0 +1,355 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model ClienteEstado {
+  idEstadoCliente          Int       @id @default(autoincrement()) @map("id_estado_cliente")
+  vigente                  Boolean   @default(true)
+  descripcionEstadoCliente String?   @map("descripcion_estado_cliente") @db.VarChar(255)
+  estadoCliente            String    @map("estado_cliente") @db.VarChar(100)
+  fechaMod                 DateTime  @updatedAt @map("fecha_mod")
+  usuarioMod               String?   @map("usuario_mod") @db.VarChar(100)
+  clientes                 Cliente[]
+
+  @@map("cliente_estado")
+}
+
+model Cliente {
+  idCliente           Int                @id @default(autoincrement()) @map("id_cliente")
+  rut                 String             @unique @db.VarChar(20)
+  dv                  String             @db.VarChar(2)
+  razonSocial         String             @map("razon_social") @db.VarChar(255)
+  nomFantasia         String?            @map("nom_fantasia") @db.VarChar(255)
+  idEmpresaLegal      Int                @map("id_empresa_legal")
+  idEstadoCliente     Int                @map("id_estado_cliente")
+  idRiesgoCliente     Int                @map("id_riesgo_cliente")
+  idRelacionComercial Int                @map("id_relacion_comercial")
+  idTamEmpresa        Int                @map("id_tam_empresa")
+  vigente             Boolean            @default(true)
+  fechaMod            DateTime           @updatedAt @map("fecha_mod")
+  usuarioMod          String?            @map("usuario_mod") @db.VarChar(100)
+  actividades         ClienteActividad[]
+  tipoEmpresaLegal    TipoEmpresaLegal   @relation(fields: [idEmpresaLegal], references: [idEmpresaLegal])
+  estado              ClienteEstado      @relation(fields: [idEstadoCliente], references: [idEstadoCliente])
+  relacionComercial   RelacionComercial  @relation(fields: [idRelacionComercial], references: [idRelacionComercial])
+  riesgo              RiesgoCliente      @relation(fields: [idRiesgoCliente], references: [idRiesgoCliente])
+  tamanoEmpresa       TamanoEmpresa      @relation(fields: [idTamEmpresa], references: [idTamEmpresa])
+  direcciones         DireccionCliente[]
+  usuarios            Usuario[]
+
+  @@index([idEmpresaLegal], map: "clientes_id_empresa_legal_fkey")
+  @@index([idEstadoCliente], map: "clientes_id_estado_cliente_fkey")
+  @@index([idRelacionComercial], map: "clientes_id_relacion_comercial_fkey")
+  @@index([idRiesgoCliente], map: "clientes_id_riesgo_cliente_fkey")
+  @@index([idTamEmpresa], map: "clientes_id_tam_empresa_fkey")
+  @@map("clientes")
+}
+
+model TipoEmpresaLegal {
+  idEmpresaLegal Int       @id @default(autoincrement()) @map("Id_empresa_legal")
+  codigo         String    @db.VarChar(20)
+  tipoEmpresa    String    @map("tipo_empresa") @db.VarChar(100)
+  tamano         String?   @db.VarChar(50)
+  descripcion    String?   @db.VarChar(255)
+  ley            String?   @db.VarChar(100)
+  vigente        Boolean   @default(true)
+  fechaMod       DateTime  @updatedAt @map("fecha_mod")
+  usuarioMod     String?   @map("usuario_mod") @db.VarChar(100)
+  clientes       Cliente[]
+
+  @@map("tipo_empresa_legal")
+}
+
+model RiesgoCliente {
+  idRiesgoCliente          Int       @id @default(autoincrement()) @map("id_riesgo_cliente")
+  riesgoCliente            String    @map("riesgo_cliente") @db.VarChar(100)
+  descripcionRiesgoCliente String?   @map("descripcion_riesgo_cliente") @db.VarChar(255)
+  vigente                  Boolean   @default(true)
+  fechaMod                 DateTime  @updatedAt @map("fecha_mod")
+  usuarioMod               String?   @map("usuario_mod") @db.VarChar(100)
+  clientes                 Cliente[]
+
+  @@map("riesgo_cliente")
+}
+
+model RelacionComercial {
+  idRelacionComercial        Int       @id @default(autoincrement()) @map("id_relacion_comercial")
+  relacionComercial          String    @map("relacion_comercial") @db.VarChar(100)
+  descripcionRelacionCliente String?   @map("descripcion_relacion_cliente") @db.VarChar(255)
+  vigente                    Boolean   @default(true)
+  fechaMod                   DateTime  @updatedAt @map("fecha_mod")
+  usuarioMod                 String?   @map("usuario_mod") @db.VarChar(100)
+  clientes                   Cliente[]
+
+  @@map("relacion_comercial")
+}
+
+model TamanoEmpresa {
+  idTamEmpresa Int       @id @default(autoincrement()) @map("id_tam_empresa")
+  tamEmpresa   String    @map("tam_empresa") @db.VarChar(50)
+  descripcion  String?   @db.VarChar(255)
+  vigente      Boolean   @default(true)
+  fechaMod     DateTime  @updatedAt @map("fecha_mod")
+  usuarioMod   String?   @map("usuario_mod") @db.VarChar(100)
+  clientes     Cliente[]
+
+  @@map("tamano_empresa")
+}
+
+model Region {
+  idRegion    Int                @id @default(autoincrement()) @map("id_region")
+  nro         Int
+  region      String             @db.VarChar(150)
+  capital     String?            @db.VarChar(100)
+  zona        String?            @db.VarChar(50)
+  vigente     Boolean            @default(true)
+  fechaMod    DateTime           @updatedAt @map("fecha_mod")
+  usuarioMod  String?            @map("usuario_mod") @db.VarChar(100)
+  comunas     Comuna[]
+  direcciones DireccionCliente[]
+  provincias  Provincia[]
+
+  @@map("region")
+}
+
+model Provincia {
+  idProvincia Int                @id @default(autoincrement()) @map("id_provincia")
+  idRegion    Int                @map("id_region")
+  provincia   String             @db.VarChar(150)
+  vigente     Boolean            @default(true)
+  fechaMod    DateTime           @updatedAt @map("fecha_mod")
+  usuarioMod  String?            @map("usuario_mod") @db.VarChar(100)
+  comunas     Comuna[]
+  direcciones DireccionCliente[]
+  region      Region             @relation(fields: [idRegion], references: [idRegion])
+
+  @@index([idRegion], map: "provincia_id_region_fkey")
+  @@map("provincia")
+}
+
+model Comuna {
+  idComuna    Int                @id @default(autoincrement()) @map("id_comuna")
+  idRegion    Int                @map("id_region")
+  idProvincia Int                @map("id_provincia")
+  comuna      String             @db.VarChar(150)
+  vigente     Boolean            @default(true)
+  fechaMod    DateTime           @updatedAt @map("fecha_mod")
+  usuarioMod  String?            @map("usuario_mod") @db.VarChar(100)
+  provincia   Provincia          @relation(fields: [idProvincia], references: [idProvincia])
+  region      Region             @relation(fields: [idRegion], references: [idRegion])
+  direcciones DireccionCliente[]
+
+  @@index([idProvincia], map: "comuna_id_provincia_fkey")
+  @@index([idRegion], map: "comuna_id_region_fkey")
+  @@map("comuna")
+}
+
+model DireccionCliente {
+  idDircli      Int           @id @default(autoincrement()) @map("id_dircli")
+  idCliente     Int           @map("id_cliente")
+  idTipoDir     Int           @map("id_tipo_dir")
+  calle         String        @db.VarChar(150)
+  numero        String?       @db.VarChar(30)
+  idRegion      Int           @map("id_region")
+  idProvincia   Int           @map("id_provincia")
+  idComuna      Int           @map("id_comuna")
+  vigente       Boolean       @default(true)
+  fechaMod      DateTime      @updatedAt @map("fecha_mod")
+  usuarioMod    String?       @map("usuario_mod") @db.VarChar(100)
+  cliente       Cliente       @relation(fields: [idCliente], references: [idCliente])
+  comuna        Comuna        @relation(fields: [idComuna], references: [idComuna])
+  provincia     Provincia     @relation(fields: [idProvincia], references: [idProvincia])
+  region        Region        @relation(fields: [idRegion], references: [idRegion])
+  tipoDireccion TipoDireccion @relation(fields: [idTipoDir], references: [idTipoDir])
+
+  @@index([idCliente], map: "direccion_cliente_id_cliente_fkey")
+  @@index([idComuna], map: "direccion_cliente_id_comuna_fkey")
+  @@index([idProvincia], map: "direccion_cliente_id_provincia_fkey")
+  @@index([idRegion], map: "direccion_cliente_id_region_fkey")
+  @@index([idTipoDir], map: "direccion_cliente_id_tipo_dir_fkey")
+  @@map("direccion_cliente")
+}
+
+model TipoDireccion {
+  idTipoDir   Int                @id @default(autoincrement()) @map("id_tipo_dir")
+  tipoDir     String             @map("Tipo_dir") @db.VarChar(100)
+  vigente     Boolean            @default(true)
+  fechaMod    DateTime           @updatedAt @map("fecha_mod")
+  usuarioMod  String?            @map("usuario_mod") @db.VarChar(100)
+  direcciones DireccionCliente[]
+
+  @@map("tipo_direccion")
+}
+
+model ClienteActividad {
+  idClienteActividad Int       @id @default(autoincrement()) @map("id_cliente_actividad")
+  idCliente          Int       @map("id_cliente")
+  idActividad        Int       @map("id_actividad")
+  esPrincipal        Boolean   @map("es_principal")
+  vigente            Boolean   @default(true)
+  fechaMod           DateTime  @updatedAt @map("fecha_mod")
+  usuarioMod         String?   @map("usuario_mod") @db.VarChar(100)
+  actividad          Actividad @relation(fields: [idActividad], references: [idActividad])
+  cliente            Cliente   @relation(fields: [idCliente], references: [idCliente])
+
+  @@index([idActividad], map: "cliente_actividad_id_actividad_fkey")
+  @@index([idCliente], map: "cliente_actividad_id_cliente_fkey")
+  @@map("cliente_actividad")
+}
+
+model Rubro {
+  idRubro     Int         @id @default(autoincrement()) @map("id_rubro")
+  rubro       String      @db.VarChar(255)
+  vigente     Boolean     @default(true)
+  fechaMod    DateTime    @updatedAt @map("fecha_mod")
+  usuarioMod  String?     @map("usuario_mod") @db.VarChar(100)
+  actividades Actividad[]
+  subrubros   Subrubro[]
+
+  @@map("rubro")
+}
+
+model Subrubro {
+  idSubrubro  Int         @id @default(autoincrement()) @map("id_subrubro")
+  idRubro     Int         @map("id_rubro")
+  subrubro    String      @db.VarChar(255)
+  vigente     Boolean     @default(true)
+  fechaMod    DateTime    @updatedAt @map("fecha_mod")
+  usuarioMod  String?     @map("usuario_mod") @db.VarChar(100)
+  actividades Actividad[]
+  rubro       Rubro       @relation(fields: [idRubro], references: [idRubro])
+
+  @@index([idRubro], map: "subrubro_id_rubro_fkey")
+  @@map("subrubro")
+}
+
+model Actividad {
+  idActividad        Int                @id @default(autoincrement()) @map("id_actividad")
+  idRubro            Int                @map("id_rubro")
+  idSubrubro         Int                @map("id_subrubro")
+  codigoSii          String             @unique @map("codigo_sii") @db.VarChar(20)
+  actividad          String             @db.VarChar(500)
+  afectoIva          Boolean            @map("afecto_iva")
+  categoria          String?            @db.VarChar(100)
+  palabrasClave      String?            @map("palabras_clave") @db.Text
+  vigente            Boolean            @default(true)
+  fechaMod           DateTime           @updatedAt @map("fecha_mod")
+  usuarioMod         String?            @map("usuario_mod") @db.VarChar(100)
+  rubro              Rubro              @relation(fields: [idRubro], references: [idRubro])
+  subrubro           Subrubro           @relation(fields: [idSubrubro], references: [idSubrubro])
+  clienteActividades ClienteActividad[]
+
+  @@index([idRubro], map: "actividad_id_rubro_fkey")
+  @@index([idSubrubro], map: "actividad_id_subrubro_fkey")
+  @@map("actividad")
+}
+
+model TipoTelefono {
+  idTipoTel  Int      @id @default(autoincrement()) @map("id_tipo_tel")
+  tipoTel    String   @map("tipo_tel") @db.VarChar(100)
+  vigente    Boolean  @default(true)
+  fechaMod   DateTime @updatedAt @map("fecha_mod")
+  usuarioMod String?  @map("usuario_mod") @db.VarChar(100)
+
+  @@map("tipo_tel")
+}
+
+model EstadoContacto {
+  idEstadoCont   Int      @id @default(autoincrement()) @map("id_estado_cont")
+  estadoContacto String   @map("Estado_contacto") @db.VarChar(100)
+  fechaMod       DateTime @updatedAt @map("fecha_mod")
+  usuarioMod     String?  @map("usuario_mod") @db.VarChar(100)
+
+  @@map("estado_contacto")
+}
+
+model TipoContacto {
+  idTipoContacto Int      @id @default(autoincrement()) @map("id_tipo_contacto")
+  tipoContacto   String   @map("tipo_contacto") @db.VarChar(100)
+  vigente        Boolean  @default(true)
+  fechaMod       DateTime @updatedAt @map("fecha_mod")
+  usuarioMod     String?  @map("usuario_mod") @db.VarChar(100)
+
+  @@map("tipo_contacto")
+}
+
+model Rol {
+  idRol      Int       @id @default(autoincrement()) @map("id_rol")
+  rol        String    @db.VarChar(100)
+  vigente    Boolean   @default(true)
+  fechaMod   DateTime  @updatedAt @map("fecha_mod")
+  usuarioMod String?   @map("usuario_mod") @db.VarChar(100)
+  usuarios   Usuario[]
+
+  @@map("roles")
+}
+
+model Usuario {
+  idUsuario           Int                  @id @default(autoincrement()) @map("id_usuario")
+  email               String               @unique @db.VarChar(150)
+  password            String               @db.VarChar(255)
+  idRol               Int                  @map("id_rol")
+  idCliente           Int?                 @map("id_cliente")
+  vigente             Boolean              @default(true)
+  fechaMod            DateTime             @updatedAt @map("fecha_mod")
+  usuarioMod          String?              @map("usuario_mod") @db.VarChar(100)
+  passwordResetTokens PasswordResetToken[]
+  sesionesAuditoria   SesionAuditoria[]
+  sesionesActivas     SesionActiva[]
+  cliente             Cliente?             @relation(fields: [idCliente], references: [idCliente])
+  rol                 Rol                  @relation(fields: [idRol], references: [idRol])
+
+  @@index([idCliente], map: "usuarios_id_cliente_fkey")
+  @@index([idRol], map: "usuarios_id_rol_fkey")
+  @@map("usuarios")
+}
+
+model SesionAuditoria {
+  idSesionAuditoria Int      @id @default(autoincrement()) @map("id_sesion_auditoria")
+  idUsuario         Int?     @map("id_usuario")
+  email             String   @db.VarChar(150)
+  resultado         String   @db.VarChar(30)
+  ip                String?  @db.VarChar(100)
+  userAgent         String?  @map("user_agent") @db.VarChar(500)
+  detalle           String?  @db.VarChar(255)
+  fecha             DateTime @default(now())
+  usuario           Usuario? @relation(fields: [idUsuario], references: [idUsuario])
+
+  @@index([idUsuario], map: "sesion_auditoria_id_usuario_fkey")
+  @@map("sesion_auditoria")
+}
+
+model SesionActiva {
+  idSesionActiva Int       @id @default(autoincrement()) @map("id_sesion_activa")
+  idUsuario      Int       @map("id_usuario")
+  token          String    @unique @db.VarChar(255)
+  email          String    @db.VarChar(150)
+  rol            String    @db.VarChar(100)
+  ip             String?   @db.VarChar(100)
+  userAgent      String?   @map("user_agent") @db.VarChar(500)
+  activa         Boolean   @default(true)
+  fechaInicio    DateTime  @default(now()) @map("fecha_inicio")
+  fechaUltimaAct DateTime  @default(now()) @map("fecha_ultima_act")
+  fechaCierre    DateTime? @map("fecha_cierre")
+  usuario        Usuario   @relation(fields: [idUsuario], references: [idUsuario])
+
+  @@index([idUsuario], map: "sesiones_activas_id_usuario_fkey")
+  @@map("sesiones_activas")
+}
+
+model PasswordResetToken {
+  usuarioId Int      @map("id_usuario")
+  createdAt DateTime @default(now()) @map("created_at")
+  email     String   @db.VarChar(150)
+  expiresAt DateTime @map("expires_at")
+  id        Int      @id @default(autoincrement())
+  token     String   @unique @db.VarChar(255)
+  usuario   Usuario  @relation(fields: [usuarioId], references: [idUsuario], onDelete: Cascade)
+
+  @@index([usuarioId], map: "password_reset_tokens_id_usuario_fkey")
+  @@map("password_reset_tokens")
+}

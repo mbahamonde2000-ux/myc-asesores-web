@@ -17,9 +17,23 @@ type SessionUser = {
   nombre: string;
   username: string;
   role: "admin" | "usuario" | "cliente";
+  clientId?: number | null;
 };
 
 type ClientProfile = {
+  razonSocial: string;
+  rut: string;
+  giro: string;
+  contacto: string;
+  correo: string;
+  telefono: string;
+  direccion: string;
+  comuna: string;
+  ciudad: string;
+};
+
+type Client = {
+  id: number;
   razonSocial: string;
   rut: string;
   giro: string;
@@ -47,12 +61,30 @@ type DocumentItem = {
   archivo: string;
 };
 
+const CLIENTS_STORAGE_KEY = "myc_clients_v2";
+
+const initialClientProfile: ClientProfile = {
+  razonSocial: "Cliente Demo SpA",
+  rut: "76.123.456-7",
+  giro: "Servicios de consultoría y apoyo empresarial",
+  contacto: "Mariano Bahamonde",
+  correo: "cliente@demo.cl",
+  telefono: "+56 9 1234 5678",
+  direccion: "Av. Principal 1234",
+  comuna: "La Reina",
+  ciudad: "Santiago",
+};
+
 export default function DashboardClientePage() {
   const router = useRouter();
   const [user, setUser] = useState<SessionUser | null>(null);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [clientProfile, setClientProfile] =
+    useState<ClientProfile>(initialClientProfile);
+  const [profileSavedMessage, setProfileSavedMessage] = useState("");
 
   useEffect(() => {
-    const session = getSession();
+    const session = getSession() as SessionUser | null;
 
     if (!session) {
       router.push("/login");
@@ -65,18 +97,136 @@ export default function DashboardClientePage() {
     }
 
     setUser(session);
+
+    const storedClients = localStorage.getItem(CLIENTS_STORAGE_KEY);
+
+    if (!storedClients) {
+      setClientProfile(initialClientProfile);
+      return;
+    }
+
+    try {
+      const parsedClients = JSON.parse(storedClients) as Client[];
+      const matchedClient = parsedClients.find(
+        (client) => client.id === session.clientId
+      );
+
+      if (!matchedClient) {
+        setClientProfile(initialClientProfile);
+        return;
+      }
+
+      setClientProfile({
+        razonSocial: matchedClient.razonSocial ?? "",
+        rut: matchedClient.rut ?? "",
+        giro: matchedClient.giro ?? "",
+        contacto: matchedClient.contacto ?? "",
+        correo: matchedClient.correo ?? "",
+        telefono: matchedClient.telefono ?? "",
+        direccion: matchedClient.direccion ?? "",
+        comuna: matchedClient.comuna ?? "",
+        ciudad: matchedClient.ciudad ?? "",
+      });
+    } catch (error) {
+      console.error("Error al cargar la ficha del cliente:", error);
+      setClientProfile(initialClientProfile);
+    }
   }, [router]);
 
-  const clientProfile: ClientProfile = {
-    razonSocial: "Cliente Demo SpA",
-    rut: "76.123.456-7",
-    giro: "Servicios de consultoría y apoyo empresarial",
-    contacto: "Mariano Bahamonde",
-    correo: "cliente@demo.cl",
-    telefono: "+56 9 1234 5678",
-    direccion: "Av. Principal 1234",
-    comuna: "La Reina",
-    ciudad: "Santiago",
+  const handleProfileChange = (field: keyof ClientProfile, value: string) => {
+    setClientProfile((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleSaveProfile = () => {
+    if (!user?.clientId) {
+      console.error("La sesión no tiene clientId.");
+      return;
+    }
+
+    const storedClients = localStorage.getItem(CLIENTS_STORAGE_KEY);
+
+    try {
+      const parsedClients: Client[] = storedClients
+        ? JSON.parse(storedClients)
+        : [];
+
+      const existingIndex = parsedClients.findIndex(
+        (client) => client.id === user.clientId
+      );
+
+      if (existingIndex >= 0) {
+        parsedClients[existingIndex] = {
+          ...parsedClients[existingIndex],
+          ...clientProfile,
+        };
+      } else {
+        parsedClients.push({
+          id: user.clientId,
+          ...clientProfile,
+        });
+      }
+
+      localStorage.setItem(CLIENTS_STORAGE_KEY, JSON.stringify(parsedClients));
+
+      setIsEditingProfile(false);
+      setProfileSavedMessage("Ficha actualizada correctamente.");
+
+      setTimeout(() => {
+        setProfileSavedMessage("");
+      }, 3000);
+    } catch (error) {
+      console.error("Error al guardar la ficha del cliente:", error);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    if (!user?.clientId) {
+      setClientProfile(initialClientProfile);
+      setIsEditingProfile(false);
+      setProfileSavedMessage("");
+      return;
+    }
+
+    const storedClients = localStorage.getItem(CLIENTS_STORAGE_KEY);
+
+    if (!storedClients) {
+      setClientProfile(initialClientProfile);
+      setIsEditingProfile(false);
+      setProfileSavedMessage("");
+      return;
+    }
+
+    try {
+      const parsedClients = JSON.parse(storedClients) as Client[];
+      const matchedClient = parsedClients.find(
+        (client) => client.id === user.clientId
+      );
+
+      if (!matchedClient) {
+        setClientProfile(initialClientProfile);
+      } else {
+        setClientProfile({
+          razonSocial: matchedClient.razonSocial ?? "",
+          rut: matchedClient.rut ?? "",
+          giro: matchedClient.giro ?? "",
+          contacto: matchedClient.contacto ?? "",
+          correo: matchedClient.correo ?? "",
+          telefono: matchedClient.telefono ?? "",
+          direccion: matchedClient.direccion ?? "",
+          comuna: matchedClient.comuna ?? "",
+          ciudad: matchedClient.ciudad ?? "",
+        });
+      }
+    } catch (error) {
+      console.error("Error al restaurar la ficha del cliente:", error);
+      setClientProfile(initialClientProfile);
+    }
+
+    setIsEditingProfile(false);
+    setProfileSavedMessage("");
   };
 
   const services: ServiceItem[] = [
@@ -161,7 +311,6 @@ export default function DashboardClientePage() {
             los servicios contratados y acceder a la documentación asociada a tu
             asesoría.
           </p>
-          
         </section>
 
         <div className="grid gap-4">
@@ -179,24 +328,103 @@ export default function DashboardClientePage() {
                 </h3>
               </div>
 
-              <button className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white hover:bg-white/10">
-                <Pencil className="h-4 w-4" />
-                Editar
-              </button>
+              {!isEditingProfile ? (
+                <button
+                  type="button"
+                  onClick={() => setIsEditingProfile(true)}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white hover:bg-white/10"
+                >
+                  <Pencil className="h-4 w-4" />
+                  Editar
+                </button>
+              ) : (
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={handleSaveProfile}
+                    className="inline-flex items-center rounded-full bg-white px-4 py-2 text-sm font-semibold text-black transition hover:bg-neutral-200"
+                  >
+                    Guardar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleCancelEdit}
+                    className="inline-flex items-center rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white transition hover:bg-white/10"
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              )}
             </div>
 
-              <div className="mt-6">
-              <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
-                <GridItem label="Razón social" value={clientProfile.razonSocial} />
-                <GridItem label="RUT" value={clientProfile.rut} />
-                <GridItem label="Giro" value={clientProfile.giro} />
-                <GridItem label="Contacto" value={clientProfile.contacto} />
-                <GridItem label="Correo" value={clientProfile.correo} />
-                <GridItem label="Teléfono" value={clientProfile.telefono} />
-                <GridItem label="Dirección" value={clientProfile.direccion} />
-                <GridItem label="Comuna" value={clientProfile.comuna} />
-                <GridItem label="Ciudad" value={clientProfile.ciudad} />
+            {profileSavedMessage && (
+              <div className="mt-4 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-300">
+                {profileSavedMessage}
               </div>
+            )}
+
+            <div className="mt-6">
+              {!isEditingProfile ? (
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
+                  <GridItem label="Razón social" value={clientProfile.razonSocial} />
+                  <GridItem label="RUT" value={clientProfile.rut} />
+                  <GridItem label="Giro" value={clientProfile.giro} />
+                  <GridItem label="Contacto" value={clientProfile.contacto} />
+                  <GridItem label="Correo" value={clientProfile.correo} />
+                  <GridItem label="Teléfono" value={clientProfile.telefono} />
+                  <GridItem label="Dirección" value={clientProfile.direccion} />
+                  <GridItem label="Comuna" value={clientProfile.comuna} />
+                  <GridItem label="Ciudad" value={clientProfile.ciudad} />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-3">
+                  <ProfileInput
+                    label="Razón social"
+                    value={clientProfile.razonSocial}
+                    onChange={(value) => handleProfileChange("razonSocial", value)}
+                  />
+                  <ProfileInput
+                    label="RUT"
+                    value={clientProfile.rut}
+                    onChange={(value) => handleProfileChange("rut", value)}
+                  />
+                  <ProfileInput
+                    label="Giro"
+                    value={clientProfile.giro}
+                    onChange={(value) => handleProfileChange("giro", value)}
+                  />
+                  <ProfileInput
+                    label="Contacto"
+                    value={clientProfile.contacto}
+                    onChange={(value) => handleProfileChange("contacto", value)}
+                  />
+                  <ProfileInput
+                    label="Correo"
+                    value={clientProfile.correo}
+                    onChange={(value) => handleProfileChange("correo", value)}
+                  />
+                  <ProfileInput
+                    label="Teléfono"
+                    value={clientProfile.telefono}
+                    onChange={(value) => handleProfileChange("telefono", value)}
+                  />
+                  <ProfileInput
+                    label="Dirección"
+                    value={clientProfile.direccion}
+                    onChange={(value) => handleProfileChange("direccion", value)}
+                  />
+                  <ProfileInput
+                    label="Comuna"
+                    value={clientProfile.comuna}
+                    onChange={(value) => handleProfileChange("comuna", value)}
+                  />
+                  <ProfileInput
+                    label="Ciudad"
+                    value={clientProfile.ciudad}
+                    onChange={(value) => handleProfileChange("ciudad", value)}
+                  />
+                </div>
+              )}
             </div>
           </section>
 
@@ -287,6 +515,36 @@ function GridItem({ label, value }: { label: string; value: string }) {
         className="px-4 py-3.5 text-sm font-medium leading-6 text-white transition duration-200 group-hover:bg-[#444444]"
       >
         {value}
+      </div>
+    </div>
+  );
+}
+
+function ProfileInput({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div className="group overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/70 shadow-lg shadow-black/10">
+      <div
+        style={{ backgroundColor: "#262626" }}
+        className="border-b border-white/10 px-4 py-2.5 text-[11px] uppercase tracking-[0.16em] text-neutral-300"
+      >
+        {label}
+      </div>
+
+      <div style={{ backgroundColor: "#3a3a3a" }} className="px-4 py-3.5">
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full rounded-lg border border-white/10 bg-neutral-900 px-3 py-2 text-sm font-medium text-white outline-none transition focus:border-white/20"
+        />
       </div>
     </div>
   );
